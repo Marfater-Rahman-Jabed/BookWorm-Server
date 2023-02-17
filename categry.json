@@ -1,0 +1,470 @@
+[
+    {
+        "_categoryid": "63e63c0c1e93df93066df547",
+        "name": "Religious",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/LkKTfv2/islam-Holy-Quran.jpg",
+                "name": "Holy Quran",
+                "price": 100,
+                "rating": 5,
+                "Author": "Allah",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/3Np7fxz/islam-Lost-Islamic-History.jpg",
+                "name": "Lost Islamic History",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/fp07vS8/islam-Muslim-Worlds.jpg",
+                "name": "Muslim World",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/cv8Dpf1/islam-Human-Rights-In-Islam.jpg",
+                "name": "Human Rights in Islam",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/1dy55n6/islam-Stories-Of-propets.jpg",
+                "name": "Stories Of Prophets",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/b10M1gJ/islam-Path-Way-to-paradise.jpg",
+                "name": "Pathway to Paradise",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    },
+    {
+        "_categoryid": "63e63c0c1e93df93066df548",
+        "name": "Novel",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/dKm4GCs/Novel-Winter.jpg",
+                "name": "Different Winter",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/cyrSqnb/Novel-Water-Ship-Down.jpg",
+                "name": "WaterShip Down",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/kxh8w3M/Novel-New-Down.jpg",
+                "name": "A New Down",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/ySLkdYq/Novel-Money.jpg",
+                "name": "Money",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/hgxPyqg/Novel-Mad-Money.jpg",
+                "name": "Mad Money",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/82gw4Rd/Novel-Good-Sister.jpg",
+                "name": "Good Sister",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    },
+    {
+        "_categoryid": "63e63c0c1e93df93066df549",
+        "name": "Science Fiction",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/Fm6ZTDW/sc-Your-Book-Title.jpg",
+                "name": "Your Book Title",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/7NwxZyj/sc-Scfiction.jpg",
+                "name": "Science Fiction Lorem",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/CP73Bbk/sc-Fiction.jpg",
+                "name": "Science fiction 101",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/nDSCpD5/sc-City-Stairs.jpg",
+                "name": "City Stairs",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/nQXPLVr/sc-City-of-perls.jpg",
+                "name": "City of Pearls",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/DfBz4Nw/sc-Carrie-Annes.jpg",
+                "name": "Carrie Annes",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    },
+    {
+        "_categoryid": "63e63c0c1e93df93066df54a",
+        "name": "Academic",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/64kYHky/Ac-QUANTAm.jpg",
+                "name": "Quantam Physics",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/KsbDPhW/acmath.jpg",
+                "name": "Mathematics",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/MkWNjB3/ACIELTS.jpg",
+                "name": "IELTS",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/59F8j4f/ac-Englush.jpg",
+                "name": "English",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/sQnwBQX/ACChemistry.jpg",
+                "name": "Chemistry",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/rHs6CjD/Ac-Biology.jpg",
+                "name": "Biology",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    },
+    {
+        "_categoryid": "63e63c0c1e93df93066df54b",
+        "name": "Kids Book",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/8cxNrYY/kids1.jpg",
+                "name": "Kids learn",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/rQ8Q5hP/kids2.png",
+                "name": "Kids Smooth",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/Lv5MDnn/kids3.jpg",
+                "name": "Kids starting",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/dJqmFsy/kids4.jpg",
+                "name": "Kids laugh",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/SBps8q1/kids5.jpg",
+                "name": "Kids best book",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/dfGP74R/kids6.jpg",
+                "name": "Kids Awesome",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    },
+    {
+        "_categoryid": "63e63c0c1e93df93066df54c",
+        "name": "Magazine",
+        "friends": [
+            {
+                "picture": "https://i.ibb.co/pbKs50s/mg1.jpg",
+                "name": "Magazine 2020",
+                "price": 100,
+                "rating": 5,
+                "Author": "Times",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/WtQGc4Z/mg2.jpg",
+                "name": "Magazine 2021",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/znhKVgf/mg3.jpg",
+                "name": "Magazine 2022",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/p2CgGPF/mg4.jpg",
+                "name": "Magazine 2023",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/k2NGkKb/mg5.jpg",
+                "name": "Magazine 2024",
+                "price": 100,
+                "rating": 5,
+                "Author": "Kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            },
+            {
+                "picture": "https://i.ibb.co/bBHSR4K/mg6.jpg",
+                "name": "Magazine 2025",
+                "price": 100,
+                "rating": 5,
+                "Author": "kasem",
+                "location": "Dhaka",
+                "yearOfUses": 10,
+                "postedTime": "12-12-12",
+                "resalePrice": 500,
+                "OrginalPrice": 100
+            }
+        ]
+    }
+]
