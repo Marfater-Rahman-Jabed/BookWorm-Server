@@ -76,6 +76,21 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/book', async (req, res) => {
+
+            const query = req.body;
+            // console.log(query)
+            const result = await BookCollection.updateOne(
+                {
+                    _id: new ObjectId(query.CategoryId)
+                },
+                {
+                    $push: { friends: query }
+                })
+            res.send(result);
+
+        })
+
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = {
@@ -102,6 +117,12 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        app.get('/allseller', async (req, res) => {
+            const query = { role: 'seller' };
+            const cursor = UserCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         app.put('/alluser/admin/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
@@ -117,6 +138,25 @@ async function run() {
 
         })
 
+        app.get('/alluser/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await UserCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' });
+        })
+        app.get('/alluser/buyer/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await UserCollection.findOne(query);
+            res.send({ isBuyer: user?.role === 'buyer' });
+        })
+        app.get('/alluser/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await UserCollection.findOne(query);
+            res.send({ isSeller: user?.role === 'seller' });
+        })
+
         app.delete('/alluser/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -124,6 +164,20 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/alluser/verify/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    verifyed: 'verifyed'
+                }
+            }
+            const result = await UserCollection.updateOne(filter, updateDoc, options)
+            res.send(result);
+
+
+        })
         app.put('/category/update/:id', async (req, res) => {
             const id = req.params.id;
             const filter = {
