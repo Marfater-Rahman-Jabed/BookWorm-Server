@@ -44,6 +44,7 @@ async function run() {
         const UserCollection = client.db('UsedBook').collection('UserCollection');
         const BookingCollection = client.db('UsedBook').collection('BookingCollection');
         const SellerBookCollection = client.db('UsedBook').collection('SellerBookCollection');
+        const AdvertiseCollection = client.db('UsedBook').collection('AdvertiseCollection');
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -234,7 +235,27 @@ async function run() {
             const result = await BookingCollection.insertOne(booking);
             res.send(result);
         })
+        app.get('/orders', async (req, res) => {
+            const email = req.query;
+            // console.log(email.email)
+            const query = { email: email.email }
+            const cursor = BookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
 
+        })
+
+        app.post('/advertise', async (req, res) => {
+            const doc = req.body;
+            const result = await AdvertiseCollection.insertOne(doc);
+            res.send(result);
+        })
+        app.get('/advertise', async (req, res) => {
+            const query = {};
+            const cursor = AdvertiseCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
     }
     finally {
 
