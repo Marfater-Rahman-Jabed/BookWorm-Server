@@ -43,6 +43,7 @@ async function run() {
         const BookCollection = client.db('UsedBook').collection('BookCollection');
         const UserCollection = client.db('UsedBook').collection('UserCollection');
         const BookingCollection = client.db('UsedBook').collection('BookingCollection');
+        const SellerBookCollection = client.db('UsedBook').collection('SellerBookCollection');
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -91,6 +92,23 @@ async function run() {
 
         })
 
+        app.post('/sellerbook', async (req, res) => {
+            const query = req.body;
+            const result = await SellerBookCollection.insertOne(query);
+            res.send(result);
+        })
+
+        app.get('/myproduct', async (req, res) => {
+            const email = req.query;
+            console.log(email.email)
+            const query = { email: email.email };
+            // console.log(query)
+            const cursor = SellerBookCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+
+        })
+
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
             const query = {
@@ -123,6 +141,18 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        app.get('/allbuyer', async (req, res) => {
+            const query = { role: 'buyer' };
+            const cursor = UserCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+        // app.get('/verifyedSeller', async (req, res) => {
+        //     const query = { verifyed: 'verifyed' };
+        //     const cursor = UserCollection.find(query);
+        //     const result = await cursor.toArray();
+        //     res.send(result);
+        // })
         app.put('/alluser/admin/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
@@ -155,6 +185,12 @@ async function run() {
             const query = { email };
             const user = await UserCollection.findOne(query);
             res.send({ isSeller: user?.role === 'seller' });
+        })
+        app.get('/alluser/verifyed/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await UserCollection.findOne(query);
+            res.send({ isVerifyed: user?.verifyed === 'verifyed' });
         })
 
         app.delete('/alluser/:id', async (req, res) => {
