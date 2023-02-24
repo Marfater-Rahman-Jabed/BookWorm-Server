@@ -286,6 +286,7 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await AdvertiseCollection.deleteOne(query);
+
             res.send(result);
         })
     }
