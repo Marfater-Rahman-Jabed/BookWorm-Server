@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
 const { query } = require('express');
-require('dotenv').config()
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -45,6 +47,7 @@ async function run() {
         const BookingCollection = client.db('UsedBook').collection('BookingCollection');
         const SellerBookCollection = client.db('UsedBook').collection('SellerBookCollection');
         const AdvertiseCollection = client.db('UsedBook').collection('AdvertiseCollection');
+        const PaymentCollection = client.db('UsedBook').collection('PaymentCollection');
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -53,21 +56,7 @@ async function run() {
             res.send(result);
 
         })
-        // app.put('/book', async (req, res) => {
-        //     const filter = {friends};
-        //     const updateDoc = {
-        //         $set: {
-        //             location: 'Dhaka',
-        //             yearOfUses: 10,
-        //             postedTime: '12-12-12',
-        //             resalePrice: 500,
-        //             OrginalPrice: 100
-        //         }
-        //     }
-        //     const result = await BookCollection.updateMany(filter, updateDoc);
-        //     res.send(result)
 
-        // })
         app.get('/book/:id', async (req, res) => {
             const id = req.params.id;
             const filter = {
@@ -148,12 +137,7 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
-        // app.get('/verifyedSeller', async (req, res) => {
-        //     const query = { verifyed: 'verifyed' };
-        //     const cursor = UserCollection.find(query);
-        //     const result = await cursor.toArray();
-        //     res.send(result);
-        // })
+
         app.put('/alluser/admin/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
@@ -244,6 +228,48 @@ async function run() {
             res.send(result);
 
         })
+        app.post('/create-payment-intent', async (req, res) => {
+            const booking = req.body;
+            const price = booking.price;
+            const amount = price * 100;
+            const paymentIntent = await stripe.paymentIntents.create(
+                {
+                    amount: amount,
+                    currency: 'usd',
+                    "payment_method_types": [
+                        "card"
+                    ],
+
+                }
+            );
+            res.send({
+                clientSecret: paymentIntent.client_secret,
+            });
+
+        });
+
+        app.post('/payment', async (req, res) => {
+            const payment = req.body;
+            const result = await PaymentCollection.insertOne(payment);
+            const bookingId = payment.bookingId;
+            const filter = { _id: new ObjectId(bookingId) };
+            updateDoc = {
+                $set: {
+                    paid: true
+                }
+            }
+
+            const UpdateBooking = await BookingCollection.updateOne(filter, updateDoc)
+            res.send(result);
+        })
+
+        app.get('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const result = await BookingCollection.findOne(filter);
+            res.send(result);
+        });
+
 
         app.post('/advertise', async (req, res) => {
             const doc = req.body;
@@ -255,6 +281,12 @@ async function run() {
             const cursor = AdvertiseCollection.find(query);
             const result = await cursor.toArray();
             res.send(result)
+        })
+        app.delete('/advertise/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await AdvertiseCollection.deleteOne(query);
+            res.send(result);
         })
     }
     finally {
