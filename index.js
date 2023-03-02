@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
+const nodemailer = require("nodemailer");
+const mg = require('nodemailer-mailgun-transport');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
@@ -19,22 +21,38 @@ const uri = `mongodb+srv://${process.env.DB_User}:${process.env.DB_Pass}@cluster
 console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-function verifyJWT(req, res, next) {
-    const AuthHeader = req.headers.authorization;
-    if (!AuthHeader) {
-        return res.status(403).send('UnAuthorized Access');
 
+function SendEmail(payment) {
+    const { name, price, transectionId, email, BookName } = payment
+    const auth = {
+        auth: {
+            api_key: process.env.PRIVATE_API,
+            domain: process.env.MAIL_DOMAIN
+        }
     }
-    const token = AuthHeader.split(' ')[0];
-    jwt.verify(token, process.env.ACCESS_TOKEN, function (error, decoded) {
-        if (error) {
-            return res.status(403).send({ message: 'forebedden' })
-        };
-    })
-    req.decoded = decoded;
-    next()
-}
+    const transporter = nodemailer.createTransport(mg(auth));
+    transporter.sendMail({
+        from: "marfaterrahman@gmail.com", // verified sender email
+        to: email, // recipient email
+        subject: "Successful Payment", // Subject line
+        text: "Hello world!", // plain text body
+        html: `
+        <p>Your Payment $ ${price}  is successfully done</p>
+        <p>Your Transection id : <b>${transectionId}</b>
+        <p>Your Ordered Book is :<b>${BookName}</b></p>
 
+        <p>Thanks From</p>
+        <p>BookWorm</p>
+        
+        `, // html body
+    }, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 
 
@@ -48,6 +66,9 @@ async function run() {
         const SellerBookCollection = client.db('UsedBook').collection('SellerBookCollection');
         const AdvertiseCollection = client.db('UsedBook').collection('AdvertiseCollection');
         const PaymentCollection = client.db('UsedBook').collection('PaymentCollection');
+
+
+
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -104,13 +125,12 @@ async function run() {
             const query = {
                 email: email
             };
-            const user = await UserCollection.find(query);
+            const user = await UserCollection.findOne(query);
             if (user) {
-                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
+                const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' })
                 return res.send({ accessToken: token })
-
             }
-            res.status(403).send({ accessToken: ' ' })
+            res.status(403).send({ accessToken: '' })
 
         })
 
@@ -202,7 +222,7 @@ async function run() {
         app.put('/category/update/:id', async (req, res) => {
             const id = req.params.id;
             const filter = {
-                _id: newObjectId(id)
+                _id: new ObjectId(id)
             };
             const options = { upsert: true };
             const updateDoc = {
@@ -260,6 +280,7 @@ async function run() {
             }
 
             const UpdateBooking = await BookingCollection.updateOne(filter, updateDoc)
+            SendEmail(payment)
             res.send(result);
         })
 
