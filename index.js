@@ -1,16 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config()
-const jwt = require('jsonwebtoken');
-const nodemailer = require("nodemailer");
-const mg = require('nodemailer-mailgun-transport');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
-
+const jwt = require('jsonwebtoken');
 const { query } = require('express');
 
+const nodemailer = require('nodemailer');
+const mg = require('nodemailer-mailgun-transport');
+require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
+
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 
 
 app.use(cors());
@@ -22,27 +22,23 @@ console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
-function SendEmail(payment) {
-    const { name, price, transectionId, email, BookName } = payment
+function sendBookingEmail(payment) {
+    const { email, price, BookName, transectionId } = payment
     const auth = {
         auth: {
             api_key: process.env.PRIVATE_API,
-            domain: process.env.MAIL_DOMAIN
+            domain: process.env.EMAIL_DOMAIN
         }
     }
     const transporter = nodemailer.createTransport(mg(auth));
     transporter.sendMail({
-        from: "marfaterrahman@gmail.com", // verified sender email
-        to: email, // recipient email
-        subject: "Successful Payment", // Subject line
+        from: "jabedcouict@gmail.com", // verified sender email
+        to: `${email}`, // recipient email
+        subject: `Successfull payment`, // Subject line
         text: "Hello world!", // plain text body
         html: `
-        <p>Your Payment $ ${price}  is successfully done</p>
-        <p>Your Transection id : <b>${transectionId}</b>
-        <p>Your Ordered Book is :<b>${BookName}</b></p>
-
-        <p>Thanks From</p>
-        <p>BookWorm</p>
+        <p>Please visit us on ${transectionId} ${BookName} ${price} at </p>
+        <p>Thanks from Doctors Portal</p>
         
         `, // html body
     }, function (error, info) {
@@ -237,6 +233,7 @@ async function run() {
         app.post('/booking', async (req, res) => {
             const booking = req.body;
             const result = await BookingCollection.insertOne(booking);
+
             res.send(result);
         })
         app.get('/orders', async (req, res) => {
@@ -280,7 +277,7 @@ async function run() {
             }
 
             const UpdateBooking = await BookingCollection.updateOne(filter, updateDoc)
-            SendEmail(payment)
+            sendBookingEmail(payment)
             res.send(result);
         })
 
