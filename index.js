@@ -6,11 +6,15 @@ const { query } = require('express');
 
 const nodemailer = require('nodemailer');
 const mg = require('nodemailer-mailgun-transport');
+const SSLCommerzPayment = require('sslcommerz-lts');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
 
 const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
+const store_id = process.env.STORE_ID;
+const store_passwd = process.env.SSL_PASSWORD;
+const is_live = false //true for live, false for sandbox
 
 
 app.use(cors());
@@ -27,7 +31,7 @@ function sendBookingEmail(payment) {
     const auth = {
         auth: {
             api_key: process.env.PRIVATE_API,
-            domain: process.env.EMAIL_DOMAIN
+            domain: process.env.MAILER_DOMAIN
         }
     }
     const transporter = nodemailer.createTransport(mg(auth));
@@ -37,8 +41,10 @@ function sendBookingEmail(payment) {
         subject: `Successfull payment`, // Subject line
         text: "Hello world!", // plain text body
         html: `
-        <p>Please visit us on ${transectionId} ${BookName} ${price} at </p>
-        <p>Thanks from Doctors Portal</p>
+        <p>Your payment <b>${price}</b> taka is successfully done for <b> ${BookName}</b> Item </p>
+        <p>Your TransectionId is : <b>${transectionId}</b> </p>
+        <p>Thanks from </p>
+        <p>BookWorm</p>
         
         `, // html body
     }, function (error, info) {
@@ -232,10 +238,71 @@ async function run() {
 
         app.post('/booking', async (req, res) => {
             const booking = req.body;
-            const result = await BookingCollection.insertOne(booking);
 
-            res.send(result);
+            const transectionId = new ObjectId().toString();
+            const data = {
+                total_amount: booking.price,
+                currency: booking.currency,
+                tran_id: transectionId, // use unique tran_id for each api call
+                success_url: `https://used-book-server.vercel.app/dashboard/payment/success?transectionId=${transectionId}`,
+                fail_url: `https://used-book-server.vercel.app/dashboard/payment/fail?transectionId=${transectionId}`,
+                cancel_url: `https://used-book-server.vercel.app/dashboard/payment/cancel?transectionId=${transectionId}`,
+                ipn_url: 'http://localhost:3030/ipn',
+                shipping_method: 'Courier',
+                product_name: booking.BookName,
+                product_category: 'Electronic',
+                product_profile: 'general',
+                cus_name: booking.name,
+                cus_email: booking.email,
+                cus_add1: booking.location,
+                cus_add2: 'Dhaka',
+                cus_city: 'Dhaka',
+                cus_state: 'Dhaka',
+                cus_postcode: '1000',
+                cus_country: 'Bangladesh',
+                cus_phone: booking.phone,
+                cus_fax: '01711111111',
+                ship_name: 'Customer Name',
+                ship_add1: 'Dhaka',
+                ship_add2: 'Dhaka',
+                ship_city: 'Dhaka',
+                ship_state: 'Dhaka',
+                ship_postcode: 1000,
+                ship_country: 'Bangladesh',
+            };
+            const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
+            sslcz.init(data).then(apiResponse => {
+                // Redirect the user to payment gateway
+                let GatewayPageURL = apiResponse.GatewayPageURL
+                res.send({ url: GatewayPageURL })
+                console.log('Redirecting to: ', GatewayPageURL)
+            });
+            BookingCollection.insertOne({
+                ...booking, transectionId, paid: false
+            })
+            // res.send(result);
         })
+
+        app.post('/dashboard/payment/success', async (req, res) => {
+            const { transectionId } = req.query;
+
+            const result = await BookingCollection.updateOne({ transectionId }, {
+                $set: {
+                    paid: true,
+                    paidAt: new Date()
+                }
+            });
+            if (result.modifiedCount > 0) {
+                const orderedBooking = await BookingCollection.findOne({ transectionId })
+                console.log(orderedBooking);
+                sendBookingEmail(orderedBooking)
+                res.redirect(`https://usedbookclient.web.app/dashboard/payment/success?transectionId=${transectionId}`)
+            }
+        })
+
+
+
+
         app.get('/orders', async (req, res) => {
             const email = req.query;
             // console.log(email.email)
