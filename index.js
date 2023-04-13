@@ -27,7 +27,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 function sendBookingEmail(payment) {
-    const { email, price, BookName, transectionId } = payment
+    const { email, price, BookName, transectionId, sellerEmail, sellerPhone } = payment
     const auth = {
         auth: {
             api_key: process.env.PRIVATE_API,
@@ -43,6 +43,49 @@ function sendBookingEmail(payment) {
         html: `
         <p>Your payment <b>${price}</b> taka is successfully done for <b> ${BookName}</b> Item </p>
         <p>Your TransectionId is : <b>${transectionId}</b> </p>
+        <p>Seller Email:<b>${sellerEmail}</b></p>
+        
+        <p>Seller can delivered this item within <b>Two (2) </b> days. </p>
+        <p>If any complain about seller ,contact with Seller (go to DashBoard and click "Contact with Seller" whatsApp icon) <br/> OR  go to website and report Admin via whatsapp(which is avaiable on website screen with whatsapp icon) </p>
+
+
+        <p>Thanks from </p>
+        <p>BookWorm</p>
+        
+        `, // html body
+    }, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+function sendSellerEmail(payment) {
+    const { sellerEmail, price, BookName, transectionId, name, phone, location } = payment
+    const auth = {
+        auth: {
+            api_key: process.env.PRIVATE_API,
+            domain: process.env.MAILER_DOMAIN
+        }
+    }
+    const transporter = nodemailer.createTransport(mg(auth));
+    transporter.sendMail({
+        from: "jabedcouict@gmail.com", // verified sender email
+        to: `${sellerEmail}`, // recipient email
+        subject: `Successfull payment`, // Subject line
+        text: "Hello world!", // plain text body
+        html: `
+        <p>Your Book  <b> ${BookName}</b> is sell successfull.Your payment <b>${price}</b> taka is successfully done.</p>
+        <p>This TransectionId  : <b>${transectionId}</b> </p>
+        <p> Buyer Name  : <b>${name}</b> </p>
+        <p> Buyer Contact number  : <b>${phone}</b> </p>
+        <p> Buyer Location  : <b>${location}</b> </p>
+
+        <p>Please reached your product to the Buyer as soon as possible above this location during <b>TWO (2) days<b></p>
+
+
         <p>Thanks from </p>
         <p>BookWorm</p>
         
@@ -57,7 +100,6 @@ function sendBookingEmail(payment) {
 }
 
 
-
 async function run() {
     try {
 
@@ -70,7 +112,24 @@ async function run() {
         const PaymentCollection = client.db('UsedBook').collection('PaymentCollection');
 
 
+        app.get('/booksearch', async (req, res) => {
 
+            const search = req.query.search
+            // console.log(search)
+            let query;
+            if (search.length) {
+                query = {
+                    $text: {
+                        $search: search
+                    }
+                }
+            }
+
+            const cursor = BookCollection.find(query);
+            const result = await cursor.toArray();
+            // console.log(result);
+            res.send(result)
+        })
 
         app.get('/category', async (req, res) => {
             const query = {};
@@ -159,6 +218,18 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        app.get('/allorders', async (req, res) => {
+            const query = {}
+            const cursor = BookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+        app.get('/alladvertise', async (req, res) => {
+            const query = {}
+            const cursor = AdvertiseCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
         app.put('/alluser/admin/:id', async (req, res) => {
             const id = req.params.id;
@@ -206,6 +277,24 @@ async function run() {
             const result = await UserCollection.deleteOne(query);
             res.send(result);
         })
+        app.delete('/allorders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await BookingCollection.deleteOne(query);
+            res.send(result);
+        })
+        app.delete('/alladvertise/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await AdvertiseCollection.deleteOne(query);
+            res.send(result);
+        })
+        app.delete('/myproductdelete/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await SellerBookCollection.deleteOne(query);
+            res.send(result);
+        })
 
         app.put('/alluser/verify/:id', async (req, res) => {
             const id = req.params.id;
@@ -244,9 +333,9 @@ async function run() {
                 total_amount: booking.price,
                 currency: booking.currency,
                 tran_id: transectionId, // use unique tran_id for each api call
-                success_url: `https://used-book-server.vercel.app/dashboard/payment/success?transectionId=${transectionId}`,
-                fail_url: `https://used-book-server.vercel.app/dashboard/payment/fail?transectionId=${transectionId}`,
-                cancel_url: `https://used-book-server.vercel.app/dashboard/payment/cancel?transectionId=${transectionId}`,
+                success_url: `http://localhost:5000/dashboard/payment/success?transectionId=${transectionId}`,
+                fail_url: `http://localhost:5000/dashboard/payment/fail?transectionId=${transectionId}`,
+                cancel_url: `http://localhost:5000/dashboard/payment/cancel?transectionId=${transectionId}`,
                 ipn_url: 'http://localhost:3030/ipn',
                 shipping_method: 'Courier',
                 product_name: booking.BookName,
@@ -296,7 +385,8 @@ async function run() {
                 const orderedBooking = await BookingCollection.findOne({ transectionId })
                 console.log(orderedBooking);
                 sendBookingEmail(orderedBooking)
-                res.redirect(`https://usedbookclient.web.app/dashboard/payment/success?transectionId=${transectionId}`)
+                sendSellerEmail(orderedBooking)
+                res.redirect(`http://localhost:3000/dashboard/payment/success?transectionId=${transectionId}`)
             }
         })
 
