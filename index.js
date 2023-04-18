@@ -333,7 +333,7 @@ async function run() {
                 total_amount: booking.price,
                 currency: booking.currency,
                 tran_id: transectionId, // use unique tran_id for each api call
-                success_url: `http://localhost:5000/dashboard/payment/success?transectionId=${transectionId}`,
+                success_url: `http://localhost:5000/dashboard/payment/success?transectionId=${transectionId}&BookId=${booking.BookId ? booking.BookId : ''}`,
                 fail_url: `http://localhost:5000/dashboard/payment/fail?transectionId=${transectionId}`,
                 cancel_url: `http://localhost:5000/dashboard/payment/cancel?transectionId=${transectionId}`,
                 ipn_url: 'http://localhost:3030/ipn',
@@ -373,7 +373,39 @@ async function run() {
         })
 
         app.post('/dashboard/payment/success', async (req, res) => {
-            const { transectionId } = req.query;
+
+            const { transectionId, BookId } = req.query;
+            // console.log(transectionId, BookId, req);
+            const getQuantity = await BookCollection.findOne({ 'friends.BookId': BookId });
+            // console.log(getQuantity.friends)
+            let Quantity = getQuantity.friends.filter(BooksId => BooksId.BookId === BookId);
+
+            const lengths = Quantity[0].Qunatity - 1;
+            console.log(lengths)
+            // const filter = { BookId }
+            // const options = { upsert: true };
+            // const updateDoc = {
+            //     $set: {
+            //         "friends.$.Qunatity": lengths
+            //     }
+            // }
+
+            const updateBookQuantity = await BookCollection.updateOne({ "friends.BookId": BookId }, {
+                $set: {
+                    "friends.$.Qunatity": lengths
+                }
+            })
+            const updateSellerBookQuantity = await SellerBookCollection.updateOne({ 'BookId': BookId }, {
+                $set: {
+                    Qunatity: lengths
+                }
+            })
+            const updateAdvertise = await AdvertiseCollection.updateOne({ 'BookId': BookId }, {
+                $set: {
+                    Qunatity: lengths
+                }
+            })
+
 
             const result = await BookingCollection.updateOne({ transectionId }, {
                 $set: {
@@ -381,9 +413,10 @@ async function run() {
                     paidAt: new Date()
                 }
             });
+
             if (result.modifiedCount > 0) {
                 const orderedBooking = await BookingCollection.findOne({ transectionId })
-                console.log(orderedBooking);
+                // console.log(orderedBooking);
                 sendBookingEmail(orderedBooking)
                 sendSellerEmail(orderedBooking)
                 res.redirect(`http://localhost:3000/dashboard/payment/success?transectionId=${transectionId}`)
