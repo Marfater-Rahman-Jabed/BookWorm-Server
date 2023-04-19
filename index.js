@@ -172,7 +172,7 @@ async function run() {
 
         app.get('/myproduct', async (req, res) => {
             const email = req.query;
-            console.log(email.email)
+            // console.log(email.email)
             const query = { email: email.email };
             // console.log(query)
             const cursor = SellerBookCollection.find(query);
@@ -495,6 +495,45 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await AdvertiseCollection.deleteOne(query);
 
+            res.send(result);
+        })
+        app.put('/updatebookquantity/:id', async (req, res) => {
+            const id = req.params.id;
+            const getQuantity = await BookCollection.findOne({ 'friends.BookId': id });
+            // console.log(getQuantity.friends)
+            let Quantity = getQuantity.friends.filter(BooksId => BooksId.BookId === id);
+
+            const lengths = Quantity[0].initialQuantity;
+            const intLength = parseInt(lengths)
+            console.log(typeof (intLength))
+            const query = req.body.Qunatity;
+            const intQuery = parseInt(query)
+            console.log(typeof (intQuery))
+            const initUpdate = (intLength + intQuery);
+            console.log(initUpdate);
+            const filterSeller = { BookId: id };
+            const UpdatedDocSeller = {
+                $set: {
+                    Qunatity: query,
+                    initialQuantity: initUpdate
+                }
+            }
+            const UpdatedDocAdvertise = {
+                $set: {
+                    Qunatity: query,
+
+                }
+            }
+            const filter = { "friends.BookId": id };
+            const updateDoc = {
+                $set: {
+                    "friends.$.Qunatity": query,
+                    "friends.$.initialQuantity": initUpdate,
+                }
+            }
+            const updateAdvertise = await AdvertiseCollection.updateOne(filterSeller, UpdatedDocAdvertise)
+            const updateSeller = await SellerBookCollection.updateOne(filterSeller, UpdatedDocSeller)
+            const result = await BookCollection.updateOne(filter, updateDoc);
             res.send(result);
         })
     }
