@@ -423,7 +423,10 @@ async function run() {
             }
         })
 
-
+        app.post('/dashboard/payment/fail', async (req, res) => {
+            const { transectionId, BookId } = req.query;
+            res.redirect(`http://localhost:3000/dashboard/payment/fail?transectionId=${transectionId}`);
+        })
 
 
         app.get('/orders', async (req, res) => {
